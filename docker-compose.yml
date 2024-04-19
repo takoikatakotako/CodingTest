@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  sample-db:
+    image: mysql:8.0.36
+    environment:
+      MYSQL_ROOT_PASSWORD: sample
+      MYSQL_DATABASE: sample
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3306:3306
