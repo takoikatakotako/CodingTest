@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-    /**
-     * 匿名ユーザー新規登録
-     */
+    private final UserService userService;
+
     @RequestMapping(value = "/signup", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String signUp(@RequestBody UserSignUpRequestEntity xxx, HttpServletResponse response) {
-
-        return xxx.getName();
+        try {
+            return userService.addUser(xxx);
+        } catch (Exception e) {
+            return "error";
+        }
     }
 }
