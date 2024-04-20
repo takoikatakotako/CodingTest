@@ -8,3 +8,5 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
       - 3306:3306
+    volumes:
+      - ./sql/ddl.sql:/docker-entrypoint-initdb.d/0.sql
