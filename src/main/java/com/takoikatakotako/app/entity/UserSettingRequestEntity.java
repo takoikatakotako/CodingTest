@@ -6,10 +6,9 @@ import java.io.Serializable;
 
 @Data
 //@Builder
-public class UserResponseEntity implements Serializable {
-    Long id;
-    String name;
+public class UserSettingRequestEntity implements Serializable {
+    Long userID;
     String notificationType;
     String email;
-    String snsEndpointArn;
+    String pushToken;
 }

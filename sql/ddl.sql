@@ -6,7 +6,10 @@ set
 -- User
 create table user(
     id bigint not null auto_increment,
-    name varchar(15) not null,
+    name varchar(63) not null,
+    notification_type varchar(255) not null,
+    email varchar(255) not null,
+    sns_endpoint_arn varchar(255) not null,
     primary key(id)
 ) engine = InnoDB default charset = utf8mb4 collate = utf8mb4_bin comment 'ユーザー';
 
