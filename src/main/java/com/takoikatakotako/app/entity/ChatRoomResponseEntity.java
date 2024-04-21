@@ -8,4 +8,5 @@ import java.util.ArrayList;
 @Data
 public class ChatRoomResponseEntity implements Serializable {
     Long chatRoomID;
+    ArrayList<Long> users;
 }

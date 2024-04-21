@@ -36,13 +36,12 @@ public class ChatController {
      */
     @RequestMapping(value = "/room/{chatRoomID}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public ChatRoomResponseEntity getChatRoom(@PathVariable Long chatRoomID, HttpServletResponse response) {
-        return new ChatRoomResponseEntity();
-        //        try {
-//            response.setStatus(HttpServletResponse.SC_OK);
-//            return userService.getUser(userID);
-//        } catch (Exception e) {
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//            return new UserResponseEntity();
-//        }
+        try {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return chatService.getRoom(chatRoomID);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new ChatRoomResponseEntity();
+        }
     }
 }
