@@ -111,6 +111,61 @@ public class ChatControllerTests {
 
 
 
+
+    /**
+     * 投稿したメッセージの削除ができる
+     */
+    @Test
+    @Transactional
+    void deleteMessage() throws Exception {
+        // ユーザー作成
+        UserResponseEntity firstUserSignUpResponse = signupUser("1st User");
+        Long firstUserID = firstUserSignUpResponse.getId();
+        UserResponseEntity secondUserSignUpResponse = signupUser("2nd User");
+        Long secondUserID = secondUserSignUpResponse.getId();
+
+        // チャットルーム作成
+        ArrayList<Long> userIDList = new ArrayList<>();
+        userIDList.add(firstUserID);
+        userIDList.add(secondUserID);
+        ChatRoomResponseEntity chatRoomResponse = createChatRoom("DIRECT", userIDList);
+        Long chatRoomID = chatRoomResponse.getChatRoomID();
+
+        // メッセージ送信
+        postMessage(chatRoomID, firstUserID, "AWSではどのサービスが好き？");
+        postMessage(chatRoomID, secondUserID, "S3が好きです");
+        postMessage(chatRoomID, firstUserID, "S3いいですね。私もAtenaと一緒に使います。");
+        postMessage(chatRoomID, firstUserID, "S3いいですね。私もAthenaと一緒に使います。");
+        postMessage(chatRoomID, secondUserID, "イニシャルコストが安くていいですよね。");
+
+        // メッセージ取得
+        ChatRoomMessageListResponseEntity messageListBeforeDelete = getChatRoomMessageList(chatRoomID);
+        Long willDeleteMessageID = messageListBeforeDelete.getMessages()
+                .stream()
+                .filter(message -> message.getMessage().equals("S3いいですね。私もAtenaと一緒に使います。"))
+                .findFirst().orElseThrow().getChatMessageID();
+
+
+        // メッセージ削除
+        deleteMessage(willDeleteMessageID, firstUserID);
+
+        //
+        ChatRoomMessageListResponseEntity messageListResponse = getChatRoomMessageList(chatRoomID);
+        ArrayList<ChatMessageResponseEntity> messages = messageListResponse.getMessages();
+        assertEquals(messages.size(), 4);
+//
+//        assertEquals(messages.get(0).getMessage(), "好きなプログラミング言語は？");
+//        assertEquals(messages.get(1).getMessage(), "Swiftが好きです!");
+//        assertEquals(messages.get(2).getMessage(), "Go言語が好きです。");
+//        assertEquals(messages.get(3).getMessage(), "Pythonも好きです");
+//        assertEquals(messages.get(4).getMessage(), "書き慣れたJavaが好きです。");
+//        assertEquals(messages.get(5).getMessage(), "Javaのバージョンが21で驚きました");
+    }
+
+
+
+
+
     /**
      * ユーザー作成
      */
@@ -204,5 +259,30 @@ public class ChatControllerTests {
          String response = requestResult.getResponse().getContentAsString();
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(response, ChatRoomMessageListResponseEntity.class);
+    }
+
+
+
+
+
+    /**
+     * メッセージを削除
+     */
+    private String deleteMessage(Long chatMessageID, Long userID) throws Exception {
+        ChatMessageDeleteRequestEntity requestEntity = new ChatMessageDeleteRequestEntity();
+        requestEntity.setUserID(userID);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String requestEntityJSON = mapper.writeValueAsString(requestEntity);
+
+        MvcResult requestResult = mockMvc.perform(
+                        post("/chat/message/" + chatMessageID.toString() + "/delete")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestEntityJSON)
+                )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        return requestResult.getResponse().getContentAsString();
     }
 }
