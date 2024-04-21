@@ -45,6 +45,21 @@ public class ChatController {
 
 
     /**
+     * チャットを取得する
+     */
+    @RequestMapping(value = "/room/{chatRoomID}/message", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public ChatRoomMessageListResponseEntity getChatRoomMessage(@PathVariable Long chatRoomID, HttpServletResponse response) {
+        try {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return chatService.getChatRoomMessage(chatRoomID);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new ChatRoomMessageListResponseEntity();
+        }
+    }
+
+
+    /**
      * チャットを投稿する
      */
     @RequestMapping(value = "/room/{chatRoomID}/post", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

@@ -1,8 +1,6 @@
 package com.takoikatakotako.app.controller;
 
-import com.takoikatakotako.app.entity.ChatPostMessageRequestEntity;
-import com.takoikatakotako.app.entity.ChatRoomCreateRequestEntity;
-import com.takoikatakotako.app.entity.ChatRoomResponseEntity;
+import com.takoikatakotako.app.entity.*;
 import com.takoikatakotako.app.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +16,9 @@ public class ChatService {
     private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatMessageRepository chatMessageRepository;
 
+    /**
+     * チャットルームを作成
+     */
     ChatRoomResponseEntity roomCreate(ChatRoomCreateRequestEntity entity) throws Exception {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setType(entity.getType());
@@ -35,7 +36,9 @@ public class ChatService {
         return response;
     }
 
-
+    /**
+     * チャットルームを取得
+     */
     ChatRoomResponseEntity getRoom(Long chatRoomID) throws Exception {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomID).orElseThrow();
         List<ChatRoomUser> chatRoomUsers = chatRoomUserRepository.findByChatRoomID(chatRoom.getId());
@@ -53,6 +56,33 @@ public class ChatService {
     }
 
 
+    /**
+     * チャットルームのメッセージを取得
+     */
+    ChatRoomMessageListResponseEntity getChatRoomMessage(Long chatRoomID) throws Exception {
+
+        // validation
+
+        List<ChatMessage> chatMessages = chatMessageRepository.findByChatRoomID(chatRoomID);
+
+        ArrayList<ChatMessageResponseEntity> chatMessageResponseEntities = new ArrayList<>();
+        chatMessages.forEach( chatMessage -> {
+            ChatMessageResponseEntity chatMessageResponseEntity = new ChatMessageResponseEntity();
+            chatMessageResponseEntity.setChatMessageID(chatMessage.getId());
+            chatMessageResponseEntity.setMessage(chatMessage.getMessage());
+            chatMessageResponseEntities.add(chatMessageResponseEntity);
+        });
+
+
+        ChatRoomMessageListResponseEntity chatRoomMessageListResponseEntity = new ChatRoomMessageListResponseEntity();
+        chatRoomMessageListResponseEntity.setMessages(chatMessageResponseEntities);
+        return chatRoomMessageListResponseEntity;
+    }
+
+
+    /**
+     * チャットルームのメッセージを投稿
+     */
     String postMessage(Long chatRoomID, ChatPostMessageRequestEntity requestEntity) throws Exception {
 
         // validation
