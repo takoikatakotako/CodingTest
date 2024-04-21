@@ -38,14 +38,14 @@ public class ChatControllerTests {
         String firstUserName = "1st user";
         String secondUserName = "takoikatakotako";
 
-        // SignUp Users
+        // ユーザー作成
         UserResponseEntity firstUserSignUpResponse = signupUser(firstUserName);
         Long firstUserID = firstUserSignUpResponse.getId();
         UserResponseEntity secondUserSignUpResponse = signupUser(secondUserName);
         Long secondUserID = secondUserSignUpResponse.getId();
 
 
-        // 部屋作成
+        // チャットルーム作成
         ChatRoomCreateRequestEntity chatRoomCreateRequestEntity = new ChatRoomCreateRequestEntity();
         chatRoomCreateRequestEntity.setType("XXXXX");
         ArrayList<Long> userIDList = new ArrayList<>();
@@ -67,6 +67,8 @@ public class ChatControllerTests {
         String chatRoomCreateResponse = chatRoomCreateRequestResult.getResponse().getContentAsString();
         ChatRoomResponseEntity chatRoomResponse = mapper.readValue(chatRoomCreateResponse, ChatRoomResponseEntity.class);
 
+
+        // メッセージ送信
 
 //        UserSignUpRequestEntity signupRequest = new UserSignUpRequestEntity();
 //        signupRequest.setName(userName);

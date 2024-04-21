@@ -7,6 +7,7 @@ import com.takoikatakotako.app.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomUserRepository chatRoomUserRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     ChatRoomResponseEntity roomCreate(ChatRoomCreateRequestEntity entity) throws Exception {
         ChatRoom chatRoom = new ChatRoom();
@@ -53,6 +55,17 @@ public class ChatService {
 
     String postMessage(Long chatRoomID, ChatPostMessageRequestEntity requestEntity) throws Exception {
 
+        // validation
+
+
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.setDeleted(false);
+        chatMessage.setChatRoomID(chatRoomID);
+        chatMessage.setUserID(requestEntity.getUserID());
+        chatMessage.setMessage(requestEntity.getMessage());
+        chatMessage.setCreatedAt(LocalDateTime.now());
+        chatMessage.setUpdatedAt(LocalDateTime.now());
+        chatMessageRepository.save(chatMessage);
 
 
         return "xxxx";

@@ -28,12 +28,15 @@ create table chat_room_user(
 ) engine = InnoDB default charset = utf8mb4 collate = utf8mb4_bin comment 'チャットルームユーザー';
 
 
--- Chat
-create table chat(
+-- Chat Message
+create table chat_message(
     id bigint not null auto_increment,
+    deleted bool not null,
     chat_room_id bigint not null,
     user_id bigint not null,
     message varchar(255) not null,
+    created_at datetime not null,
+    updated_at datetime not null,
     primary key(id)
-) engine = InnoDB default charset = utf8mb4 collate = utf8mb4_bin comment 'チャット';
+) engine = InnoDB default charset = utf8mb4 collate = utf8mb4_bin comment 'チャットメッセージ';
 
