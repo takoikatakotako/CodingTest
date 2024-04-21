@@ -16,4 +16,13 @@ public class User {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "notification_type", nullable = false)
+    private String notificationType;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "sns_endpoint_arn", nullable = false)
+    private String snsEndpointArn;
 }

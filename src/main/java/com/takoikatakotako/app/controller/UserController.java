@@ -1,5 +1,6 @@
 package com.takoikatakotako.app.controller;
 
+import com.takoikatakotako.app.entity.UserSettingRequestEntity;
 import com.takoikatakotako.app.entity.UserSignUpRequestEntity;
 import com.takoikatakotako.app.entity.UserResponseEntity;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,6 +38,20 @@ public class UserController {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return new UserResponseEntity();
+        }
+    }
+
+    /**
+     * ユーザーの通知を設定流する
+     */
+    @RequestMapping(value = "/setting", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String setting(@RequestBody UserSettingRequestEntity xxx, HttpServletResponse response) {
+        try {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return userService.setting(xxx);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return "Fail";
         }
     }
 }

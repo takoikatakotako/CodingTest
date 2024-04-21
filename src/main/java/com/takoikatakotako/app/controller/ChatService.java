@@ -12,9 +12,11 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class ChatService {
+    private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final AmazonSNSRepository snsRepository;
 
     /**
      * チャットルームを作成
@@ -97,6 +99,18 @@ public class ChatService {
         chatMessage.setCreatedAt(currentDateTime);
         chatMessage.setUpdatedAt(currentDateTime);
         chatMessageRepository.save(chatMessage);
+
+
+        // ユーザーを取得
+        List<ChatRoomUser> chatRoomUsers = chatRoomUserRepository.findByChatRoomID(chatRoomID);
+        chatRoomUsers.forEach( chatRoomUser -> {
+            // chatRoomUser
+            User user = userRepository.findById(chatRoomUser.getUserID()).orElseThrow();
+            // user.get
+        });
+
+        // メッセージを送信
+        // snsRepository.
 
 
         return "xxxx";
