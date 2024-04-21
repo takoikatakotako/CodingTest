@@ -1,5 +1,6 @@
 package com.takoikatakotako.app.controller;
 
+import com.takoikatakotako.app.entity.ChatPostMessageRequestEntity;
 import com.takoikatakotako.app.entity.ChatRoomCreateRequestEntity;
 import com.takoikatakotako.app.entity.ChatRoomResponseEntity;
 import com.takoikatakotako.app.repository.*;
@@ -47,5 +48,13 @@ public class ChatService {
         chatRoomResponse.setChatRoomID(chatRoom.getId());
         chatRoomResponse.setUsers(users);
         return chatRoomResponse;
+    }
+
+
+    String postMessage(Long chatRoomID, ChatPostMessageRequestEntity requestEntity) throws Exception {
+
+
+
+        return "xxxx";
     }
 }

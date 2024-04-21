@@ -1,9 +1,6 @@
 package com.takoikatakotako.app.controller;
 
-import com.takoikatakotako.app.entity.ChatRoomCreateRequestEntity;
-import com.takoikatakotako.app.entity.ChatRoomResponseEntity;
-import com.takoikatakotako.app.entity.UserResponseEntity;
-import com.takoikatakotako.app.entity.UserSignUpRequestEntity;
+import com.takoikatakotako.app.entity.*;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +39,22 @@ public class ChatController {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return new ChatRoomResponseEntity();
+        }
+    }
+
+
+
+    /**
+     * チャットを投稿する
+     */
+    @RequestMapping(value = "/room/{chatRoomID}/post", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String postMessage(@PathVariable Long chatRoomID, @RequestBody ChatPostMessageRequestEntity requestEntity, HttpServletResponse response) {
+        try {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return chatService.postMessage(chatRoomID, requestEntity);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return "";
         }
     }
 }
