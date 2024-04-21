@@ -55,8 +55,13 @@ public class ChatControllerTests {
         postMessage(chatRoomID, secondUserID, "そうですね〜");
 
         //
-        ChatRoomMessageListResponseEntity xxx = getChatRoomMessageList(chatRoomID);
-        assertEquals(xxx.getMessages().size(), 4);
+        ChatRoomMessageListResponseEntity messageListResponse = getChatRoomMessageList(chatRoomID);
+        ArrayList<ChatMessageResponseEntity> messages = messageListResponse.getMessages();
+        assertEquals(messages.size(), 4);
+        assertEquals(messages.get(0).getMessage(), "こんにちは");
+        assertEquals(messages.get(1).getMessage(), "こんにちは!");
+        assertEquals(messages.get(2).getMessage(), "いい天気ですね");
+        assertEquals(messages.get(3).getMessage(), "そうですね〜");
     }
 
 
