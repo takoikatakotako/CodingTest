@@ -26,6 +26,8 @@ public class ChatService {
             chatRoomUserRepository.save(chatRoomUser);
         });
 
-        return new ChatRoomResponseEntity();
+        ChatRoomResponseEntity response = new ChatRoomResponseEntity();
+        response.setChatRoomID(chatRoom.getId());
+        return response;
     }
 }

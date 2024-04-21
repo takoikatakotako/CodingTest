@@ -6,4 +6,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 @Data
-public class ChatRoomResponseEntity implements Serializable { }
+public class ChatRoomResponseEntity implements Serializable {
+    Long chatRoomID;
+}

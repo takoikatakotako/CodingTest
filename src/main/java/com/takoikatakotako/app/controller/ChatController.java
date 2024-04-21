@@ -6,10 +6,7 @@ import com.takoikatakotako.app.entity.UserResponseEntity;
 import com.takoikatakotako.app.entity.UserSignUpRequestEntity;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -22,7 +19,7 @@ public class ChatController {
      * チャットルームを作成する
      */
     @RequestMapping(value = "/room/create", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ChatRoomResponseEntity signup(@RequestBody ChatRoomCreateRequestEntity requestEntity, HttpServletResponse response) {
+    public ChatRoomResponseEntity roomCreate(@RequestBody ChatRoomCreateRequestEntity requestEntity, HttpServletResponse response) {
         try {
             response.setStatus(HttpServletResponse.SC_OK);
             return chatService.roomCreate(requestEntity);
@@ -30,5 +27,22 @@ public class ChatController {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return new ChatRoomResponseEntity();
         }
+    }
+
+
+
+    /**
+     * チャットルームID から情報を取得する
+     */
+    @RequestMapping(value = "/room/{chatRoomID}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public ChatRoomResponseEntity getChatRoom(@PathVariable Long chatRoomID, HttpServletResponse response) {
+        return new ChatRoomResponseEntity();
+        //        try {
+//            response.setStatus(HttpServletResponse.SC_OK);
+//            return userService.getUser(userID);
+//        } catch (Exception e) {
+//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            return new UserResponseEntity();
+//        }
     }
 }
