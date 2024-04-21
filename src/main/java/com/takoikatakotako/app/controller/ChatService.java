@@ -93,10 +93,27 @@ public class ChatService {
         chatMessage.setChatRoomID(chatRoomID);
         chatMessage.setUserID(requestEntity.getUserID());
         chatMessage.setMessage(requestEntity.getMessage());
-        chatMessage.setCreatedAt(LocalDateTime.now());
-        chatMessage.setUpdatedAt(LocalDateTime.now());
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        chatMessage.setCreatedAt(currentDateTime);
+        chatMessage.setUpdatedAt(currentDateTime);
         chatMessageRepository.save(chatMessage);
 
+
+        return "xxxx";
+    }
+
+
+
+    /**
+     * チャットルームのメッセージを削除
+     */
+    String deleteMessage(Long chatMessageID, ChatMessageDeleteRequestEntity requestEntity) throws Exception {
+
+        // validation
+        ChatMessage chatMessage = chatMessageRepository.findById(chatMessageID).orElseThrow();
+        chatMessage.setDeleted(true);
+        chatMessage.setUpdatedAt(LocalDateTime.now());
+        chatMessageRepository.save(chatMessage);
 
         return "xxxx";
     }

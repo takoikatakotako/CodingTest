@@ -60,13 +60,27 @@ public class ChatController {
 
 
     /**
-     * チャットを投稿する
+     * チャットルームにメッセージを投稿する
      */
     @RequestMapping(value = "/room/{chatRoomID}/post", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String postMessage(@PathVariable Long chatRoomID, @RequestBody ChatPostMessageRequestEntity requestEntity, HttpServletResponse response) {
         try {
             response.setStatus(HttpServletResponse.SC_OK);
             return chatService.postMessage(chatRoomID, requestEntity);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return "";
+        }
+    }
+
+    /**
+     * メッセージを削除する
+     */
+    @RequestMapping(value = "/message/{chatMessageID}/delete", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String deleteChatMessage(@PathVariable Long chatMessageID, @RequestBody ChatMessageDeleteRequestEntity requestEntity, HttpServletResponse response) {
+        try {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return chatService.deleteMessage(chatMessageID, requestEntity);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return "";
