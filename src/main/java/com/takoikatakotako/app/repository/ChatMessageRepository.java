@@ -9,11 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
-    //List<ChatMessage> findByChatRoomID(Long chatRoomID);
-
-    // List<ChatMessage> findByChatRoomIDWhere(Long chatRoomID);
-
-    //     @Query("select * from chat_message;")
-    @Query(value = "select * from chat_message where deleted=false and chat_room_id=:chatRoomID order by created_at desc;", nativeQuery = true)
+    @Query(value = "select * from chat_message where deleted=false and chat_room_id=:chatRoomID order by created_at;", nativeQuery = true)
     List<ChatMessage> findByChatRoomID(@Param("chatRoomID") Long chatRoomID);
 }
