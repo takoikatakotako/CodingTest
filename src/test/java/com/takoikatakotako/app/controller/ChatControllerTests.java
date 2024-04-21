@@ -32,13 +32,10 @@ public class ChatControllerTests {
     @Test
     @Transactional
     void oneToOneChat() throws Exception {
-        String firstUserName = "1st user";
-        String secondUserName = "takoikatakotako";
-
         // ユーザー作成
-        UserResponseEntity firstUserSignUpResponse = signupUser(firstUserName);
+        UserResponseEntity firstUserSignUpResponse = signupUser("1st User");
         Long firstUserID = firstUserSignUpResponse.getId();
-        UserResponseEntity secondUserSignUpResponse = signupUser(secondUserName);
+        UserResponseEntity secondUserSignUpResponse = signupUser("2nd User");
         Long secondUserID = secondUserSignUpResponse.getId();
 
         // チャットルーム作成
@@ -63,6 +60,55 @@ public class ChatControllerTests {
         assertEquals(messages.get(2).getMessage(), "いい天気ですね");
         assertEquals(messages.get(3).getMessage(), "そうですね〜");
     }
+
+
+
+    /**
+     * グループチャットができる
+     */
+    @Test
+    @Transactional
+    void groupChat() throws Exception {
+        // ユーザー作成
+        UserResponseEntity firstUserSignUpResponse = signupUser("1st User");
+        Long firstUserID = firstUserSignUpResponse.getId();
+        UserResponseEntity secondUserSignUpResponse = signupUser("2nd User");
+        Long secondUserID = secondUserSignUpResponse.getId();
+        UserResponseEntity thirdUserSignUpResponse = signupUser("3rd User");
+        Long thirdUserID = thirdUserSignUpResponse.getId();
+        UserResponseEntity fourthUserSignUpResponse = signupUser("4th User");
+        Long fourthID = fourthUserSignUpResponse.getId();
+
+        // チャットルーム作成
+        ArrayList<Long> userIDList = new ArrayList<>();
+        userIDList.add(firstUserID);
+        userIDList.add(secondUserID);
+        userIDList.add(thirdUserID);
+        userIDList.add(fourthID);
+        ChatRoomResponseEntity chatRoomResponse = createChatRoom("GROUP", userIDList);
+        Long chatRoomID = chatRoomResponse.getChatRoomID();
+
+        // メッセージ送信
+        postMessage(chatRoomID, firstUserID, "好きなプログラミング言語は？");
+        postMessage(chatRoomID, secondUserID, "Swiftが好きです!");
+        postMessage(chatRoomID, thirdUserID, "Go言語が好きです。");
+        postMessage(chatRoomID, fourthID, "Pythonも好きです");
+        postMessage(chatRoomID, thirdUserID, "書き慣れたJavaが好きです。");
+        postMessage(chatRoomID, fourthID, "Javaのバージョンが21で驚きました");
+
+        //　
+        ChatRoomMessageListResponseEntity messageListResponse = getChatRoomMessageList(chatRoomID);
+        ArrayList<ChatMessageResponseEntity> messages = messageListResponse.getMessages();
+        assertEquals(messages.size(), 6);
+        assertEquals(messages.get(0).getMessage(), "好きなプログラミング言語は？");
+        assertEquals(messages.get(1).getMessage(), "Swiftが好きです!");
+        assertEquals(messages.get(2).getMessage(), "Go言語が好きです。");
+        assertEquals(messages.get(3).getMessage(), "Pythonも好きです");
+        assertEquals(messages.get(4).getMessage(), "書き慣れたJavaが好きです。");
+        assertEquals(messages.get(5).getMessage(), "Javaのバージョンが21で驚きました");
+    }
+
+
 
 
     /**
